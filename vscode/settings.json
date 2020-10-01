@@ -1,0 +1,93 @@
+{
+    "window.zoomLevel": -1,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    //------ To open files in different tabs ------
+    "workbench.editor.enablePreview": false,
+    "workbench.startupEditor": "none",
+    "files.eol": "\n",
+
+    //------------ Color customization ------------
+    "workbench.colorTheme": "Material Theme Palenight High Contrast",
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#c3e88d",
+        "statusBar.noFolderBackground": "#c3e88d",
+        "statusBar.debuggingBackground": "#c3e88d"
+    },
+    "editor.rulers": [
+        { "column": 90, "color": "#c3e88d" },
+    ],
+
+    //--------- Vim' .vimrc configuration ---------
+    "vim.easymotion": true,
+    "vim.sneak": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors.normal":  "#c3e88d",
+    "vim.statusBarColors.insert":  "#ce9fdd",
+    "vim.statusBarColors.visual":  "#b1edf2",
+    "vim.statusBarColors.replace": "#e4de8e",
+    "vim.statusBarColors.commandlineinprogress": "#edf7df",
+    "vim.statusBarColors.searchinprogressmode": "#edf7df",
+    "vim.insertModeKeyBindings": [
+        {
+        "before": ["j", "j"],
+        "after": ["<Esc>"]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+        "before": ["<leader>", "d"],
+        "after": ["d", "d"]
+        },
+        {
+        "before": ["<C-j>"],
+        "after": ["<C-d>"]
+        },
+        {
+        "before": ["<C-k>"],
+        "after": ["<C-u>"]
+        },
+        {
+        "before": ["<Left>"],
+        "after": ["<C-w>", "h"]
+        },
+        {
+        "before": ["<Right>"],
+        "after": ["<C-w>", "l"]
+        },
+        {
+        "before": ["<Up>"],
+        "after": ["g", "t"]
+        },
+        {
+        "before": ["<Down>"],
+        "after": ["g", "T"]
+        },
+        {
+        "before": ["<C-n>"],
+        "commands": [":nohl"]
+        }
+    ],
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false
+    },
+
+    //------------- GIT configuration -------------
+    "git.ignoreLegacyWarning": true,
+
+    //-------- Remote VSCode configuration --------
+    // Port number to use for connection.
+    "remote.port": 52698,
+    // Launch the server on start up.
+    "remote.onstartup": true,
+    // Address to listen on.
+    "remote.host": "localhost",
+    // If set to true, error for remote.port in use won't be shown anymore.
+    "remote.dontShowPortAlreadyInUseError": false,
+
+}
