@@ -12,8 +12,10 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'benmills/vimux'
 Plugin 'dylnmc/novum.vim'
 Plugin 'zefei/simple-dark'
+Plugin 'rust-lang/rust.vim'
 Plugin 'pgavlin/pulumi.vim'
 Plugin 'wadackel/vim-dogrun'
+Plugin 'racer-rust/vim-racer'
 Plugin 'arzg/vim-colors-xcode'
 Plugin 'vim-scripts/Conque-GDB'
 Plugin 'bluz71/vim-nightfly-guicolors'
@@ -34,6 +36,9 @@ set cursorline " enable highlighting of the current line
 set nocompatible " disable vi compatibility
 set noerrorbells " disable line wrapping and error sounds
 set textwidth=120 " wrap lines at 120 chars. 80 is somewaht antiquated with nowadays displays.
+setlocal linebreak
+setlocal nolist
+setlocal display+=lastline
 
 " set Proper Tabs
 set tabstop=4 softtabstop=4     " tab width is 4 spaces
@@ -68,6 +73,8 @@ set smartindent
 " set line width limit hint
 set colorcolumn=85
 highlight ColorColumn ctermbg=234 guibg=#d7af5f
+
+"set tags=./tags;
 
 " devicons configuration 
 let g:webdevicons_conceal_nerdtree_brackets = 1
@@ -124,21 +131,64 @@ nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>f za
 
-" Cscope
-nnoremap <leader>g :cscope find g <C-r><C-w><Cr>
-nnoremap <leader>c :cscope find c <C-r><C-w><Cr>
-nnoremap <leader>s :cscope find s <C-r><C-w><Cr>
-nnoremap <leader>t :cscope find t <C-r><C-w><Cr>
-function! AttachCscope()
-    if system("test -f ./cscope.out && echo 1")
-        cscope reset
-    else
-        echo "loading cscope..."
-        let dummy = system("cscope -Rbq 2>/dev/null")
-        cscope add cscope.out
+" moving lines up/down
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+
+noremap j gj
+noremap k gk
+
+function! AttachRustTags()
+    if !system('test -f r-tags && echo 1')
+        let dummy = system("ctags -R --languages=rust -f r-tags 2>/dev/null") | redraw!
     endif
+    set tags+=r-tags
 endfunction
-nnoremap <leader>r :call AttachCscope()<Cr> 
+
+function! AttachCscope()
+    if !system("test -f cscope.out && echo 1")
+        let dummy = system("cscope -Rbq 2>/dev/null") | redraw!
+    endif
+    cscope add cscope.out
+endfunction
+
+function! AttachCTags()
+    if !system('test -f c-tags && echo 1')
+        let dummy = system("ctags -R -f c-tags 2>/dev/null") | redraw!
+    endif
+    set tags+=c-tags
+endfunction
+
+function! AttachTags()
+    let ext = expand('%:e')
+    if ext == 'rs'
+        call AttachRustTags()
+        " ctags
+        nnoremap <leader>g :tjump <C-r><C-w><Cr>
+        nnoremap <leader>s :tselect <C-r><C-w><Cr>
+        "nnoremap <leader>g :ptjump <C-r><C-w><Cr>
+        "nnoremap <leader>s :ptselect <C-r><C-w><Cr>
+    else
+        call AttachCscope()
+        call AttachCTags()
+        " cscope
+        nnoremap <leader>g :cscope find g <C-r><C-w><Cr>
+        nnoremap <leader>c :cscope find c <C-r><C-w><Cr>
+        nnoremap <leader>s :cscope find s <C-r><C-w><Cr>
+        " ctags
+        "nnoremap <leader>g :tjump <C-r><C-w><Cr>
+        "nnoremap <leader>s :tselect <C-r><C-w><Cr>
+        "nnoremap <leader><leader>g :ptjump <C-r><C-w><Cr>
+        "nnoremap <leader><leader>s :ptselect <C-r><C-w><Cr>
+    endif
+    echo 'done!'
+endfunction
+
+nnoremap <leader>r :call AttachTags()<Cr> 
 nnoremap <leader>m :call VimuxRunCommand("make")<CR>
 
 set tw=0 wrap linebreak
